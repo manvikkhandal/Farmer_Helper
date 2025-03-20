@@ -1,0 +1,555 @@
+<!DOCTYPE html>
+<html lang="en">
+
+<head>
+  <meta charset="UTF-8">
+  <meta name="viewport" content="width=device-width, initial-scale=1.0">
+  <title>KrishiGuide - Smart Farming Solutions</title>
+  <link rel="stylesheet" href="static/style.css">
+  <link rel="stylesheet" href="https://cdnjs.cloudflare.com/ajax/libs/font-awesome/6.0.0/css/all.min.css">
+</head>
+<style>
+  .feature-grid {
+    display: grid;
+    grid-template-columns: repeat(auto-fit, minmax(250px, 1fr));
+    gap: 20px;
+    padding: 20px;
+  }
+
+  .feature-card {
+    text-align: center;
+    transition: transform 0.3s ease, box-shadow 0.3s ease, text-shadow 0.3s ease;
+    box-shadow: 0 4px 6px var(--card-shadow);
+    position: relative;
+  }
+
+  .feature-card:hover {
+    transform: translateY(-10px) scale(1.05) rotate(2deg);
+    box-shadow: 0 8px 16px var(--card-hover-shadow);
+  }
+
+  .feature-card:hover h3,
+  .feature-card:hover p {
+    text-shadow: 2px 2px 8px var(--card-hover-shadow);
+    transform: scale(1.1);
+  }
+
+  .feature-card i {
+    font-size: 40px;
+    margin-bottom: 10px;
+    transition: color 0.3s ease, transform 0.3s ease;
+  }
+
+  .feature-card:hover i {
+    transform: scale(1.2);
+  }
+
+  .feature-card h3 {
+    font-size: 20px;
+    margin: 10px 0;
+    transition: transform 0.3s ease, text-shadow 0.3s ease;
+  }
+
+  .feature-card p {
+    font-size: 14px;
+    color: var(--text-color);
+    transition: transform 0.3s ease, text-shadow 0.3s ease;
+  }
+
+  .feature-card:hover::after {
+    content: '';
+    position: absolute;
+    border-radius: 50%;
+    pointer-events: none;
+    transform: translate(-50%, -50%);
+    animation: cursorEffect 0.3s ease;
+  }
+
+  @keyframes cursorEffect {
+    0% {
+      transform: scale(0.5);
+      opacity: 0.8;
+    }
+
+    100% {
+      transform: scale(1.5);
+      opacity: 0;
+    }
+  }
+
+  .hero-image img {
+    width: 100%;
+    max-width: 600px;
+    border-radius: 10px;
+    transition: transform 0.5s ease, box-shadow 0.5s ease;
+  }
+
+  .hero-image img:hover {
+    transform: rotate(5deg) scale(1.1);
+    box-shadow: 0 15px 25px rgba(0, 0, 0, 0.3);
+  }
+
+  .about-image img {
+    width: 100%;
+    max-width: 600px;
+    border-radius: 10px;
+    transition: transform 0.5s ease, box-shadow 0.5s ease;
+  }
+
+  .about-image img:hover {
+    transform: rotate(5deg) scale(1.1);
+    box-shadow: 0 15px 25px rgba(0, 0, 0, 0.3);
+  }
+
+  .contact-image img {
+    width: 100%;
+    max-width: 600px;
+    border-radius: 10px;
+    transition: transform 0.5s ease, box-shadow 0.5s ease;
+  }
+
+  .contact-image img:hover {
+    transform: rotate(5deg) scale(1.1);
+    box-shadow: 0 15px 25px rgba(0, 0, 0, 0.3);
+  }
+
+  .feature-card a {
+    color: inherit;
+    /* Inherits the color from the parent element */
+    text-decoration: none;
+    /* Removes underline */
+  }
+
+  .feature-card a:hover {
+    color: #009632;
+    /* Changes color on hover */
+  }
+
+  .chatbot-container {
+    position: fixed;
+    bottom: 20px;
+    right: 20px;
+    z-index: 1000;
+}
+
+.chatbot-icon {
+    width: 70px;
+    height: 70px;
+    border-radius: 50%;
+    cursor: pointer;
+    box-shadow: none;
+    overflow: hidden;
+    background: none;
+    animation: float 3s ease-in-out infinite;
+}
+
+
+.chatbot-icon img {
+    width: 100%;
+    height: 100%;
+    object-fit: cover;
+}
+
+@keyframes float {
+    0% { transform: translateY(0px); }
+    50% { transform: translateY(-10px); }
+    100% { transform: translateY(0px); }
+}
+
+.chat-window {
+    position: absolute;
+    bottom: 80px;
+    right: 0;
+    width: 300px;
+    height: 400px;
+    background-color: white;
+    border-radius: 15px;
+    box-shadow: 0 4px 12px rgba(0,0,0,0.15);
+    display: none;
+    flex-direction: column;
+    overflow: hidden;
+}
+
+.chat-window.active {
+    display: flex;
+}
+
+.chat-header {
+    padding: 1rem;
+    background-color: var(--primary-color);
+    color: white;
+    display: flex;
+    justify-content: space-between;
+    align-items: center;
+}
+
+.close-chat {
+    background: none;
+    border: none;
+    color: white;
+    font-size: 1.5rem;
+    cursor: pointer;
+}
+
+.chat-messages {
+    flex-grow: 1;
+    padding: 1rem;
+    overflow-y: auto;
+    background-color: #f8f9fa;
+}
+
+.message {
+    margin-bottom: 1rem;
+    padding: 0.8rem 1rem;
+    border-radius: 10px;
+    max-width: 80%;
+    box-shadow: 0 2px 4px rgba(0,0,0,0.05);
+}
+
+.message.bot {
+    background-color: #e9ecef;
+    color: #2c3e50;
+    margin-right: auto;
+    border-bottom-left-radius: 4px;
+}
+
+.message.user {
+    background-color: var(--primary-color);
+    color: white;
+    margin-left: auto;
+    border-bottom-right-radius: 4px;
+}
+
+.chat-input {
+    padding: 1rem;
+    display: flex;
+    gap: 0.5rem;
+    border-top: 1px solid #eee;
+    background-color: white;
+}
+
+.chat-input input {
+    flex-grow: 1;
+    padding: 0.8rem;
+    border: 1px solid #e9ecef;
+    border-radius: 5px;
+    outline: none;
+    font-size: 0.9rem;
+}
+
+.chat-input input:focus {
+    border-color: var(--primary-color);
+    box-shadow: 0 0 0 2px rgba(46, 204, 113, 0.1);
+}
+
+.chat-input button {
+    padding: 0.8rem 1.2rem;
+    background-color: var(--primary-color);
+    color: white;
+    border: none;
+    border-radius: 5px;
+    cursor: pointer;
+    transition: background-color 0.2s;
+}
+
+.chat-input button:hover {
+    background-color: var(--primary-dark);
+}
+
+</style>
+
+<body class="light">
+  <nav>
+    <div class="logo">KrishiGuide</div>
+    <div class="nav-links">
+      <a href="#home" class="active" data-en="Home" data-hi="होम">Home</a>
+      <a href="#features" data-en="Features" data-hi="सुविधाएं">Features</a>
+      <a href="#about" data-en="About" data-hi="हमारे बारे में">About</a>
+      <a href="#contact" data-en="Contact" data-hi="संपर्क करें">Contact</a>
+      <button id="langToggle">EN</button>
+      <button id="themeToggle"><i class="fas fa-moon"></i></button>
+      <button class="get-started" onclick="window.location.href='#features';" data-hi="शुरू करें" data-en="Get Started">Get Started</button>
+    </div>
+  </nav>
+
+  <main>
+    <section id="home" class="hero">
+      <div class="hero-content">
+        <span class="tag">AI-Powered Farming</span>
+        <h1 class="title" data-en="Smart Farming for Better Yields" data-hi="बेहतर उपज के लिए स्मार्ट खेती">Smart
+          Farming for Better Yields</h1>
+        <p class="subtitle"
+          data-en="Make data-driven decisions with AI-powered tools designed specifically for farmers. Increase yields, predict prices, and protect your crops."
+          data-hi="किसानों के लिए विशेष रूप से डिज़ाइन किए गए AI-संचालित टूल्स के साथ डेटा-आधारित निर्णय लें। उपज बढ़ाएं, कीमतों की भविष्यवाणी करें और अपनी फसलों की रक्षा करें।">
+          Make data-driven decisions with AI-powered tools designed specifically for farmers. Increase yields, predict
+          prices, and protect your crops.</p>
+        <div class="cta-buttons">
+          <button class="get-started" onclick="window.location.href='#features';" data-hi="शुरू करें" data-en="Get Started">Get Started</button>
+          <button class="learn-more" onclick="window.location.href='#about';" data-hi="अधिक जानें" data-en="Learn More">Learn More</button>
+        </div>
+        <div class="stats">
+          <span class="highlight">10,000+</span> farmers already using our tools
+        </div>
+      </div>
+      <div class="hero-image">
+        <img
+          src="https://images.unsplash.com/photo-1625246333195-78d9c38ad449?ixlib=rb-4.0.3&ixid=M3wxMjA3fDB8MHxwaG90by1wYWdlfHx8fGVufDB8fHx8fA%3D%3D&auto=format&fit=crop&w=1000&q=80"
+          alt="Farmer using technology">
+      </div>
+    </section>
+
+    <section id="features" class="features" style="border-radius: 20px;">
+      <h2 class="section-title" data-en="Intelligent Tools for Modern Farmers"
+        data-hi="आधुनिक किसानों के लिए बुद्धिमान उपकरण">Intelligent Tools for Modern Farmers</h2>
+      <p class="section-subtitle"
+        data-en="Our AI-powered tools help you make informed decisions at every step of your farming journey"
+        data-hi="हमारे AI-संचालित टूल आपकी खेती यात्रा के हर कदम पर सूचित निर्णय लेने में मदद करते हैं">Our AI-powered
+        tools help you make informed decisions at every step of your farming journey</p>
+
+      <div class="feature-grid">
+        <div class="feature-card">
+          <i class="fas fa-seedling"></i>
+          <a href="/crop_recommendation">
+            <h3 data-en="Crop Suggestion" data-hi="फसल सुझाव">Crop Suggestion</h3>
+          </a>
+          <p data-en="Get AI-powered recommendations on which crops to plant based on your soil, climate, and market conditions"
+            data-hi="अपनी मिट्टी, जलवायु और बाज़ार की स्थितियों के आधार पर कौन सी फ़सलें लगानी चाहिए, इस पर AI-संचालित सुझाव प्राप्त करें">
+            Get AI-powered recommendations on which crops to plant based on your soil, climate, and market conditions
+          </p>
+        </div>
+        <div class="feature-card">
+          <i class="fas fa-chart-line"></i>
+          <a href="/crop_price_predict">
+            <h3 data-en="Price Prediction" data-hi="मूल्य भविष्यवाणी">Price Prediction</h3>
+          </a>
+          <p data-en="Forecast future crop prices using machine learning models that analyze market trends and demand patterns"
+            data-hi="मशीन लर्निंग मॉडल का उपयोग करके भविष्य की फसल की कीमतों का पूर्वानुमान करें जो बाजार के रुझान और मांग पैटर्न का विश्लेषण करते हैं">
+            Forecast future crop prices using machine learning models that analyze market trends and demand patterns
+          </p>
+        </div>
+        <div class="feature-card">
+          <i class="fas fa-bug"></i>
+          <a href="/plant_disease">
+            <h3 data-hi="रोग का पता लगाना" data-en="Disease Detection">Disease Detection</h3>
+          </a>
+          <p data-en="Identify plant diseases early by uploading photos of your crops for instant AI-powered diagnosis"
+            data-hi="
+          तत्काल AI-संचालित निदान के लिए अपनी फसलों की तस्वीरें अपलोड करके पौधों की बीमारियों की प्रारंभिक पहचान करें">
+            Identify plant diseases early by uploading photos of your crops for instant AI-powered diagnosis</p>
+        </div>
+        <div class="feature-card">
+          <i class="fas fa-cloud-sun"></i>
+          <a href="/weather_forecast">
+            <h3 data-en="Weather Forecast" data-hi="मौसम पूर्वानुमान
+          ">Weather Forecast</h3>
+          </a>
+          <p data-en="Get accurate weather predictions specifically tailored for your farm's location to plan your activities"
+            data-hi="
+          अपनी गतिविधियों की योजना बनाने के लिए अपने खेत के स्थान के लिए विशेष रूप से तैयार सटीक मौसम पूर्वानुमान प्राप्त करें">
+            Get accurate weather predictions specifically tailored for your farm's location to plan your activities</p>
+        </div>
+      </div>
+    </section>
+
+    <section id="about" class="about">
+      <div class="about-content">
+        <h2 class="section-title" data-en="Powered by Artificial Intelligence" data-hi="एआई द्वारा संचालित">Powered by
+          Artificial Intelligence</h2>
+        <p class="section-subtitle" data-en="Leveraging cutting-edge technology for smarter farming"
+          data-hi="स्मार्ट खेती के लिए अत्याधुनिक तकनीक का उपयोग">Leveraging cutting-edge technology for smarter farming
+        </p>
+
+        <div class="about-grid">
+          <div class="about-text">
+            <div class="about-feature">
+              <i class="fas fa-brain"></i>
+              <p data-en="Our machine learning algorithms analyze historical data, weather patterns, and market trends to provide accurate price predictions for your crops."
+                data-hi="हमारे मशीन लर्निंग एल्गोरिदम ऐतिहासिक डेटा, मौसम पैटर्न और बाजार के रुझानों का विश्लेषण करके आपकी फसलों के लिए सटीक मूल्य भविष्यवाणी प्रदान करते हैं।">
+                Our machine learning algorithms analyze historical data, weather patterns, and market trends to provide
+                accurate price predictions for your crops.</p>
+            </div>
+            <div class="about-feature">
+              <i class="fas fa-microscope"></i>
+              <p data-en="Advanced computer vision and deep learning models help detect plant diseases with over 95% accuracy."
+                data-hi="उन्नत कंप्यूटर विजन और डीप लर्निंग मॉडल 95% से अधिक सटीकता के साथ पौधों की बीमारियों का पता लगाने में मदद करते हैं।">
+                Advanced computer vision and deep learning models help detect plant diseases with over 95% accuracy.</p>
+            </div>
+            <div class="about-feature">
+              <i class="fas fa-robot"></i>
+              <p data-en="Smart recommendation systems consider soil conditions, climate data, and market demand to suggest the most profitable crops."
+                data-hi="स्मार्ट अनुशंसा प्रणालियां सबसे लाभदायक फसलों का सुझाव देने के लिए मिट्टी की स्थिति, जलवायु डेटा और बाजार की मांग पर विचार करती हैं।">
+                Smart recommendation systems consider soil conditions, climate data, and market demand to suggest the
+                most profitable crops.</p>
+            </div>
+          </div>
+          <div class="about-image">
+            <img
+              src="https://images.unsplash.com/photo-1581091226825-a6a2a5aee158?ixlib=rb-4.0.3&ixid=M3wxMjA3fDB8MHxwaG90by1wYWdlfHx8fGVufDB8fHx8fA%3D%3D&auto=format&fit=crop&w=1000&q=80"
+              alt="AI Technology in Agriculture">
+          </div>
+        </div>
+      </div>
+    </section>
+
+    <section id="contact" class="contact" style="border-radius: 20px;">
+      <div class="contact-container">
+        <div class="contact-content">
+          <h2 class="section-title" data-en="Get in Touch" data-hi="संपर्क करें">Get in Touch</h2>
+          <p class="section-subtitle" data-en="We're here to help you succeed"
+            data-hi="हम आपकी सफलता में सहायता के लिए यहां हैं">We're here to help you succeed</p>
+
+          <div class="contact-grid">
+            <div class="contact-form">
+              <form>
+                <div class="form-group">
+                  <input type="text" id="contact-name" placeholder="Your Name" required>
+                </div>
+                <div class="form-group">
+                  <input type="email" id="contact-email" placeholder="Your Email" required>
+                </div>
+                <div class="form-group">
+                  <textarea id="contact-message" placeholder="Your Message" required></textarea>
+                </div>
+                <button type="submit" id="contact-submit" class="submit-btn" data-en="Send Message" data-hi="मेसेज भेजें">Send Message</button>
+              </form>
+            </div>
+            <div class="contact-image">
+              <img
+                src="https://images.unsplash.com/photo-1516321165247-4aa89a48be28?ixlib=rb-4.0.3&ixid=M3wxMjA3fDB8MHxwaG90by1wYWdlfHx8fGVufDB8fHx8fA%3D%3D&auto=format&fit=crop&w=1000&q=80"
+                alt="Contact Us">
+            </div>
+          </div>
+        </div>
+      </div>
+    </section>
+  </main>
+
+  <footer>
+    <div class="footer-content">
+      <div class="footer-section">
+        <h3>KrishiGuide</h3>
+        <p data-en="Smart farming solutions powered by AI" data-hi="AI द्वारा संचालित स्मार्ट कृषि समाधान">Smart farming
+          solutions powered by AI</p>
+      </div>
+      <div class="footer-section">
+        <h3 data-hi="
+        त्वरित सम्पक" data-en="Quick Links">Quick Links</h3>
+        <a href="/" data-en="Home" data-hi="होम">Home</a>
+        <a href="#features" data-en="Features" data-hi="सुविधाएं">Features</a>
+        <a href="#about" data-en="About" data-hi="हमारे बारे में">About</a>
+        <a href="#contact" data-en="Contact" data-hi="संपर्क करें">Contact</a>
+        <a href="/developers" data-en="Developers" data-hi="डेवलपर्स">Developers</a>
+      </div>
+      <div class="footer-section">
+        <h3 data-en="Features" data-hi="सुविधाएं">Features</h3>
+        <a href="/crop_recommendation" data-en="Crop Suggestion" data-hi="फसल सुझाव
+        ">Crop Suggestion</a>
+        <a href="/crop_price_predict" data-en="Price Prediction" data-hi="मूल्य भविष्यवाणी
+        ">Price Prediction</a>
+        <a href="/plant_disease" data-en="Disease Detection" data-hi="रोग का पता लगाना
+        ">Disease Detection</a>
+        <a href="/weather_forecast" data-en="Weather Forecast" data-hi="मौसम पूर्वानुमान
+        ">Weather Forecast</a>
+      </div>
+      <div class="footer-section">
+        <h3 data-en="Contact" data-hi="संपर्क करें">Contact</h3>
+        <p>info@krishiguide.com</p>
+        <div class="social-links">
+          <a href="#"><i class="fab fa-facebook"></i></a>
+          <a href="#"><i class="fab fa-twitter"></i></a>
+          <a href="#"><i class="fab fa-instagram"></i></a>
+          <a href="#"><i class="fab fa-linkedin"></i></a>
+        </div>
+      </div>
+    </div>
+    <div class="footer-bottom">
+      <p data-en="&copy; 2025 KrishiGuide. All rights reserved." data-hi="&copy; 
+      2025 कृषिगाइड। सभी अधिकार सुरक्षित।">&copy; 2025 KrishiGuide. All rights reserved.</p>
+    </div>
+  </footer>
+
+  <div class="chatbot" id="chatbot">
+    <div class="chatbot-toggle">
+      <i class="fas fa-comments"></i>
+    </div>
+    <div class="chatbot-container hidden">
+      <div class="chatbot-header">
+        <h3>KrishiGuide Assistant</h3>
+        <button class="close-chat"><i class="fas fa-times"></i></button>
+      </div>
+      <div class="chatbot-messages"></div>
+      <div class="chatbot-input">
+        <input type="text" placeholder="Type your message...">
+        <button><i class="fas fa-paper-plane"></i></button>
+      </div>
+    </div>
+  </div>
+
+  <script>
+document.addEventListener("DOMContentLoaded", function () {
+    const chatbotToggle = document.querySelector(".chatbot-toggle");
+    const chatbotContainer = document.querySelector(".chatbot-container");
+    const closeChat = document.querySelector(".close-chat");
+    const chatMessages = document.querySelector(".chatbot-messages");
+    const chatInput = document.querySelector(".chatbot-input input");
+    const sendButton = document.querySelector(".chatbot-input button");
+
+    function appendMessage(sender, message) {
+        const messageDiv = document.createElement("div");
+        messageDiv.classList.add("message", sender);
+        messageDiv.innerHTML = `<p>${message}</p>`;
+        chatMessages.appendChild(messageDiv);
+        chatMessages.scrollTop = chatMessages.scrollHeight; // Auto-scroll to the latest message
+    }
+
+    // Function to show the initial welcome message
+    function showWelcomeMessage() {
+        appendMessage("bot", "Hello! Welcome to Krishi Guide. How can I help you?");
+    }
+
+    chatbotToggle.addEventListener("click", () => {
+        chatbotContainer.classList.toggle("hidden");
+        if (!chatbotContainer.classList.contains("hidden")) {
+            showWelcomeMessage(); // Display welcome message when chatbot is opened
+        }
+    });
+
+    closeChat.addEventListener("click", () => {
+        chatbotContainer.classList.add("hidden");
+    });
+
+    function sendMessage() {
+        const userText = chatInput.value.trim();
+        if (!userText) return;
+
+        appendMessage("user", userText);
+        chatInput.value = "";
+
+        fetch("/chat", {
+            method: "POST",
+            headers: { "Content-Type": "application/json" },
+            body: JSON.stringify({ message: userText })
+        })
+        .then(response => response.json())
+        .then(data => {
+            appendMessage("bot", data.reply);
+        })
+        .catch(error => {
+            appendMessage("bot", "Error connecting to the server.");
+        });
+    }
+
+    sendButton.addEventListener("click", sendMessage);
+    chatInput.addEventListener("keypress", (e) => {
+        if (e.key === "Enter") sendMessage();
+    });
+});
+
+
+
+  </script>
+  <script src="static/script.js"></script>
+
+</body>
+
+</html>
